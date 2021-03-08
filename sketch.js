@@ -1,36 +1,53 @@
-var backgroundImg, bg;
-var ground, player, image;
+var backgroundImg, bg, clouds;
+var ground, player, marioImage,groundImg, cloudImg;
+var cloudsGroup;
 
 function preload(){
  backgroundImg = loadImage("Background Image.jpg");
- image=loadAnimation("mario2.png", "mario1.png");
+ marioImage=loadAnimation("mario2.png", "mario1.png");
+ groundImg=loadImage("ground.png");
+ cloudImg=loadImage("cloud.png");
 }
-
-
 
 function setup() {
  createCanvas(windowWidth,windowHeight);
 
- ground = createSprite(500, 530, 5000, 10);
- ground.visible = false;
+ //bg=createSprite(windowWidth,windowHeight);
+ //bg.addImage(backgroundImg);
+ //bg.scale=3;
 
- player = createSprite(200, 300, 50, 50);
- player.scale = 0.01;
- player.addAnimation("mario_running",image);
+ ground = createSprite(500, 750, windowWidth, 10);
+ ground.addImage(groundImg);
+ ground.velocityX = -10;
+ ground.x=ground.width/2;
 
- bg=createSprite(0,0, windowWidth, windowHeight);
- bg.addImage(backgroundImg);
- bg.scale=3;
- bg.velocityX = -7;
+ player = createSprite(200, 620, 50, 50);
+ player.addAnimation("mario_running",marioImage);
+ //player.scale = 0.01;
+
+cloudsGroup = new Group();
 }
 
 function draw() {
- background("blue"); 
+ background(94, 145, 254); 
 
- if(bg.x<0){
-  bg.x=bg.width/2;
+ if(ground.x < 500){
+    ground.x=ground.width/2;
  }
 
+ 
  // player.collide(ground);
- drawSprites();
+ spawnClouds();
+drawSprites();
 }
+
+ function spawnClouds(){
+     if(frameCount%50===0){
+     clouds = createSprite(1500, random(200, 450), 100, 100);
+     clouds.addImage(cloudImg);
+     clouds.scale=3;
+     clouds.velocityX=-15;
+     clouds.lifetime = 200;
+     cloudsGroup.add(clouds);
+    }
+ }
